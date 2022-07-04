@@ -10,13 +10,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
+// importing constants, hooks and other screens such as the modal screen and not found screen
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+
+import HomeImage from '../assets/images/icons/chef-icon.png';
+
+// Importing the 2 screens or pages we have created
+import FindChefs from '../screens/FindChefs';
+import Home from '../screens/Home';
+import TabThreeScreen from '../screens/TabThreeScreen';
+
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+// Imported from the navigation folder. The ./ means this directory we are in.
 import LinkingConfiguration from './LinkingConfiguration';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -32,7 +40,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 /**
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
- */
+*/
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
@@ -50,7 +58,7 @@ function RootNavigator() {
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
- */
+*/
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
@@ -58,19 +66,22 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        name="FindChefs"
+        component={FindChefs}
+        options={({ navigation }: RootTabScreenProps<'FindChefs'>) => ({
+          title: 'Find Chefs',
+          
+          tabBarIcon: ({ color, size }) => {
+            return <FontAwesome name="search" color={color} size={size} />;
+          },
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() =>navigation.navigate('Modal')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
@@ -85,14 +96,24 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="Home"
+        component={Home}
         options={{
-          title: 'Tab Two',
+          title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
-    </BottomTab.Navigator>
+
+      <BottomTab.Screen
+        name="TabThree"
+        component={TabThreeScreen}
+        options={{
+          title: 'My Profile',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          }}
+      />
+      </BottomTab.Navigator>
+
   );
 }
 
